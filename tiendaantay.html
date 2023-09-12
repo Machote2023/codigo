@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Antay</title>
+
+    <!-- Agrega los estilos de Bootstrap 4 (CSS) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        /* Estilos para los colores de Tu Supermercado */
+        body {
+            background-color: #E4A001; /* Fondo naranja */
+        }
+
+        .navbar {
+            background-color: #190A81; /* Barra de navegación azul */
+        }
+
+        footer {
+            background-color: #B5B4B4; /* Pie de página plomo */
+            color: #fff;
+        }
+
+        /* Agrega aquí tus estilos personalizados para las tarjetas de producto */
+        .product-card {
+            max-width: 250px;
+            margin: 0 auto;
+        }
+
+        /* Estilo para reducir el espacio entre líneas en el carrusel */
+        #carouselUltimosIngresosInner p {
+            margin-bottom: 0.5px; /* Ajusta este valor según la cantidad de espacio que desees entre líneas */
+        }
+
+        /* Estilo para reducir el espacio entre líneas en la sección "Todos los Productos" */
+        #product-list p {
+            margin-bottom: 1px; /* Ajusta este valor según la cantidad de espacio que desees entre líneas */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row" style="background-color: #190A81; color: #fff; padding: 10px;">
+            <div class="col-md-6">
+                <h3 style="color: #fff; font-size: 22px;">Tienda Antay - <small>Donde da gusto comprar !!</small></h3>
+            </div>
+            <div class="col-md-6">
+                <form class="form-inline mt-3 float-right">
+                    <label for="tiendaLabel" style="margin-right: 10px;">Buscar producto</label>
+                    <!-- <input class="form-control mr-sm-2" type="search" placeholder="Ingrese dato" id="searchInput"> -->
+                    <input class="form-control mr-sm-2" type="search" placeholder="Ingrese dato" id="searchInput" onkeydown="searchOnEnter(event)">
+
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searchButton"
+                        style="background-color: #190A81; color: #fff; border-color: #190A81;">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <h1 style="color: #190A81; font-size: 15px; font-weight: bold; margin-top: 20px;">CATÁLOGO DE PRODUCTOS</h1>
+
+        <!-- Agregar un espacio entre el filtro y las imágenes de los productos -->
+        <div style="margin-bottom: 30px;"></div>
+
+        <!-- Agregar un elemento select para filtrar por Línea -->
+        <label for="lineaSelect" style="font-size: 12px;">Filtrar por Línea:</label>
+
+        <select id="lineaSelect" class="form-control" style="font-size: 12px;">
+
+            <!-- Las opciones de línea se agregarán dinámicamente desde JavaScript -->
+        </select>
+
+        <!-- Carrusel para los ÚLTIMOS INGRESOS EN TIENDA -->
+
+        <div style="margin-top: 20px;">
+            <h2 style="font-size: 10px; font-weight:bold; color: #190A81;">ÚLTIMOS INGRESOS EN TIENDA:</h2>
+
+            <div id="carouselUltimosIngresos" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner" id="carouselUltimosIngresosInner">
+                    <!-- Los productos recientes se cargarán aquí dinámicamente desde JavaScript -->
+                </div>
+                <!-- Flechas de navegación -->
+                <a class="carousel-control-prev" href="#carouselUltimosIngresos" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselUltimosIngresos" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Siguiente</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Productos -->
+        <div style="margin-top: 20px;">
+            <h2 style="font-size: 10px;font-weight:bold;color: #190A81;">TODOS LOS PRODUCTOS:</h2>
+            <div class="row" id="product-list">
+                <!-- Los productos se cargarán aquí dinámicamente desde JavaScript -->
+            </div>
+        </div>
+
+        <!-- Carrito de compras (inicialmente oculto) -->
+        <div class="container mt-3" id="cart-container" style="display: none;">
+            <h2>Carrito de Compras</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                    <!-- Los elementos del carrito se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+            <button class="btn btn-success" id="checkout">Realizar Pedido</button>
+        </div>
+    </div>
+
+        <!-- Pie de página -->
+        <footer class="bg-dark py-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-white" style="font-size: 12px;">Sobre Nosotros</h5>
+
+                        <!-- Cambia el tamaño de fuente de este párrafo -->
+                        <p class="text-muted" style="font-size: 10px;">Somos una empresa familiar, tienda de conveniencia. El primer y único autoservicio de la provincia.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-white" style="font-size: 12px;">Contáctanos</h5>
+                        <!-- Cambia el tamaño de fuente de los siguientes párrafos -->
+                        <p class="text-muted" style="margin-bottom: 5px; font-size: 10px;">Estamos aquí para ayudarte. Contáctanos a través de correo electrónico o redes sociales.</p>
+                        <p class="text-muted" style="margin-bottom: 5px; font-size: 10px;">Jirón Grau 310, Cajatambo, Peru, 15195</p>
+                        <p class="text-muted" style="margin-bottom: 5px;">
+                            <a href="https://wa.me/51921566036" target="_blank" style="font-size: 12px;">LLAMANOS <img src="https://drive.google.com/uc?id=1eVU3TbtivcDAQJc53MpiugFA2A-3nFno" alt="WhatsApp" style="width: 32px; height: 32px;"></a>
+                        </p>
+                        <p class="text-muted" style="margin-bottom: 5px; font-size: 10px;">ventas@antayperu.com<br>Correo electrónico<br></p>
+                        <p class="text-muted" style="margin-bottom: 5px; font-size: 10px;">Síguenos:<br><a href="http://www.antayperu.com/" target="_blank">www.antayperu.com</a></p>
+                    </div>
+                </div>
+                <hr class="my-1">
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Cambia el tamaño de fuente de este párrafo -->
+                        <p class="text-muted" style="font-size: 12px;">&copy; 2023 Tienda Antay. Todos los derechos reservados.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><a href="#" class="text-white" style="font-size: 12px;">Términos y Condiciones</a></li>
+                            <li class="list-inline-item"><a href="#" class="text-white" style="font-size: 12px;">Política de Privacidad</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    <!-- Scripts Bootstrap 4 (asegúrate de incluir los archivos de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Función para cargar los productos desde Google Apps Script y filtrar por Línea y búsqueda
+        function cargarProductos(lineaSeleccionada, busqueda) {
+            // Realizar una solicitud HTTP a tu secuencia de comandos de Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycby_EQnTdlTfyNXAT8cytzKZIe8AVXvxOhLKBasBWEtdMa5Kalv30JuT01-8N01-SjF2Kg/exec')
+                .then(response => response.json())
+                .then(data => {
+                    // Procesar y mostrar los datos en tu página
+                    var productContainer = document.getElementById('product-list');
+                    var lineaSelect = document.getElementById('lineaSelect');
+
+                    // Limpiar los contenedores antes de cargar nuevos productos
+                    productContainer.innerHTML = '';
+
+                    // Crear un conjunto para almacenar las líneas únicas
+                    var lineasSet = new Set();
+                    var columnCounter = 0; // Contador de columnas para productos
+
+                    data.forEach(function (product) {
+                        // Agregar la línea a la lista de líneas únicas
+                        lineasSet.add(product.Linea);
+
+                        // Si se ha seleccionado una línea y no coincide, omitir este producto
+                        if (lineaSeleccionada && lineaSeleccionada !== product.Linea) {
+                            return;
+                        }
+
+                        // Si se ha ingresado una búsqueda y el producto no la contiene, omitir este producto
+                        if (busqueda && !product.Producto.toLowerCase().includes(busqueda.toLowerCase())) {
+                            return;
+                        }
+
+                        // Crear una columna para el producto (hasta 4 columnas por fila)
+                        var productColumn = document.createElement('div');
+                        productColumn.classList.add('col-md-3', 'mb-4'); // 4 columnas por fila
+
+                        // Crear una tarjeta de producto usando Bootstrap
+                        var productCard = document.createElement('div');
+                        productCard.classList.add('card', 'product-card');
+
+                        // Crear imagen del producto
+                        var productImage = document.createElement('img');
+                        productImage.src = product.Foto; // Asegúrate de que "Foto" sea la URL de la imagen en la hoja de Excel
+                        productImage.alt = product.Producto;
+                        productImage.classList.add('card-img-top');
+
+                        // Crear contenido de la tarjeta
+                        var cardBody = document.createElement('div');
+                        cardBody.classList.add('card-body');
+
+                        // Resto del código para crear la tarjeta de producto (similar a la sección "ÚLTIMOS INGRESOS EN TIENDA")
+                        var productName = document.createElement('h5');
+                        productName.classList.add('card-title');
+
+                        // Crear un elemento <span> para "product.Producto" con tamaño de fuente 10px
+                        var productNameSpan = document.createElement('span');
+                        productNameSpan.textContent = product.Producto;
+                        productNameSpan.style.fontSize = '12px'; // Establecer el tamaño de fuente
+                        productNameSpan.style.color = '#190A81'; // Establecer el color azul
+                        // Crear un elemento <span> para "product.Unidad" con tamaño de fuente 8px y color rojo
+                        var unitSpan = document.createElement('span');
+                        unitSpan.textContent = ' | ' + product.Unidad; // Agregar " | " antes de "product.Unidad"
+                        unitSpan.style.fontSize = '10px'; // Establecer el tamaño de fuente
+                        unitSpan.style.color = '"B5B4B4'; // Establecer el color rojo
+                        // Agregar los elementos <span> al elemento <h5>
+                        productName.appendChild(productNameSpan);
+                        productName.appendChild(unitSpan);
+
+                        var productBrand = document.createElement('p');
+                        productBrand.classList.add('card-text');
+                        // Crear un elemento <span> para "product.Marca" con color rojo y tamaño de fuente 20px
+                        var marcaSpan = document.createElement('span');
+                        marcaSpan.textContent = product.Marca;
+                        marcaSpan.style.fontSize = '10px'; // Tamaño de fuente 20px
+                        marcaSpan.style.color = '#B5B4B4'; // Color plomo
+                        // Crear un elemento <span> para "'Código de producto: ' + product.Codigo" con tamaño de fuente 30px
+                        var codeSpan = document.createElement('span');
+                        codeSpan.textContent = 'Código de producto: ' + product.Codigo;
+                        codeSpan.style.fontSize = '8px'; // Tamaño de fuente 8px
+                        marcaSpan.style.color = '#B5B4B4'; // Color plomo
+                        // Agregar los elementos <span> al elemento <p> productBrand
+                        productBrand.appendChild(marcaSpan);
+                        productBrand.appendChild(document.createTextNode(' | ')); // Agregar el separador " | "
+                        productBrand.appendChild(codeSpan);
+
+                        var productPrice = document.createElement('p');
+                        productPrice.classList.add('card-text');
+                        productPrice.innerHTML = '<span style="color: red; font-size: 12px; font-weight: bold;">En tienda:</span> <span style="font-size: 12px; font-weight: bold; color: red;">' + product.Moneda + ' ' + parseFloat(product.Precio).toFixed(2) + '</span>';
+
+                        var productAvailable = document.createElement('p');
+                        productAvailable.classList.add('card-text');
+
+                        // Crear un elemento <span> para "Disponible: " con color verde y tamaño de fuente 20px
+                        var disponibleSpan = document.createElement('span');
+                        disponibleSpan.textContent = 'Disponible: ' + product.Disponible;
+                        disponibleSpan.style.fontSize = '10px'; // Tamaño de fuente 20px
+                        disponibleSpan.style.color = '#B5B4B4'; // Color plomo
+
+                        // Agregar el elemento <span> al elemento <p> productAvailable
+                        productAvailable.appendChild(disponibleSpan);
+
+                        // Botón para agregar al carrito
+                        var addToCartButton = document.createElement('button');
+                        addToCartButton.textContent = 'Agregar al Carrito';
+                        addToCartButton.classList.add('btn', 'btn-success', 'mt-2');
+                        addToCartButton.addEventListener('click', function () {
+                            agregarAlCarrito(product);
+                        });
+
+                        // Agregar elementos a la tarjeta de producto
+                        cardBody.appendChild(productName);
+                        cardBody.appendChild(productBrand);
+                        cardBody.appendChild(productPrice);
+                        cardBody.appendChild(productAvailable);
+                        cardBody.appendChild(addToCartButton);
+
+                        productCard.appendChild(productImage);
+                        productCard.appendChild(cardBody);
+
+                        // Agregar la tarjeta de producto a la columna
+                        productColumn.appendChild(productCard);
+
+                        // Agregar la columna al contenedor
+                        productContainer.appendChild(productColumn);
+
+                        // Incrementar el contador de columnas
+                        columnCounter++;
+
+                        // Si se alcanza el límite de 4 columnas, crea una nueva fila
+                        if (columnCounter === 4) {
+                            var row = document.createElement('div');
+                            row.classList.add('row');
+                            productContainer.appendChild(row);
+                            columnCounter = 0; // Reiniciar el contador
+                        }
+                    });
+
+                    // Limpiar y llenar el elemento select con las líneas únicas
+                    lineaSelect.innerHTML = ''; // Limpia todas las opciones existentes
+                    lineaSelect.appendChild(new Option('Todas las Líneas', '')); // Agrega la opción por defecto
+                    lineasSet.forEach(function (linea) {
+                        lineaSelect.appendChild(new Option(linea, linea)); // Agrega cada línea como una opción
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar datos:', error);
+                });
+        }
+// Función para cargar los últimos ingresos en el carrusel
+function cargarUltimosIngresos() {
+            // Realizar una solicitud HTTP a tu secuencia de comandos de Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycby_EQnTdlTfyNXAT8cytzKZIe8AVXvxOhLKBasBWEtdMa5Kalv30JuT01-8N01-SjF2Kg/exec')
+                .then(response => response.json())
+                .then(data => {
+                    var carouselUltimosIngresosInner = document.getElementById('carouselUltimosIngresosInner');
+                    carouselUltimosIngresosInner.innerHTML = '';
+
+                    // Obtener la fecha actual para filtrar productos del mes y año en curso
+                    var today = new Date();
+                    var currentMonth = today.getMonth() + 1; // Sumar 1 porque los meses se indexan desde 0
+                    var currentYear = today.getFullYear();
+
+                    // Crear una tarjeta de producto para cada producto con "Ingreso" en el mes y año en curso
+                    data.forEach(function (product) {
+                        var ingresoDate = new Date(product.Ingreso);
+                        var ingresoMonth = ingresoDate.getMonth() + 1;
+                        var ingresoYear = ingresoDate.getFullYear();
+
+                        // Filtrar productos con "Ingreso" en el mes y año en curso
+                        if (ingresoMonth === currentMonth && ingresoYear === currentYear) {
+                            // Crear una tarjeta de producto similar a las de la sección de productos
+                            var productCard = document.createElement('div');
+                            productCard.classList.add('card', 'product-card', 'text-center');
+
+                            var productImage = document.createElement('img');
+                            productImage.src = product.Foto;
+                            productImage.alt = product.Producto;
+                            productImage.classList.add('card-img-top');
+
+                            var cardBody = document.createElement('div');
+                            cardBody.classList.add('card-body');
+
+                            var productName = document.createElement('h5');
+                            productName.classList.add('card-title');
+                            productName.style.fontSize = '12px';
+                            productName.style.color = '#190A81';
+                            productName.textContent = product.Producto;
+
+                            var productIngreso = document.createElement('p');
+                            productIngreso.classList.add('card-text');
+                            productIngreso.style.fontSize = '12px';
+                            productIngreso.textContent = 'Ingreso: ' + product.Ingreso;
+
+                            cardBody.appendChild(productName);
+                            cardBody.appendChild(productIngreso);
+
+                            productCard.appendChild(productImage);
+                            productCard.appendChild(cardBody);
+
+                            // Agregar la tarjeta de producto al carrusel
+                            var carouselItem = document.createElement('div');
+                            if (carouselUltimosIngresosInner.childElementCount === 0) {
+                                // La primera tarjeta de producto debe tener la clase "active" para que se muestre primero
+                                carouselItem.classList.add('carousel-item', 'active');
+                            } else {
+                                carouselItem.classList.add('carousel-item');
+                            }
+                            carouselItem.appendChild(productCard);
+                            carouselUltimosIngresosInner.appendChild(carouselItem);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error al cargar los últimos ingresos:', error));
+        }
+        // Función para agregar un producto al carrito
+        function agregarAlCarrito(product) {
+            // Inicializar el carrito si aún no se ha hecho
+            if (!localStorage.getItem('carrito')) {
+                localStorage.setItem('carrito', JSON.stringify([]));
+            }
+
+            // Obtener el carrito actual desde el almacenamiento local
+            var carrito = JSON.parse(localStorage.getItem('carrito'));
+
+            // Buscar el producto en el carrito
+            var productoEnCarrito = carrito.find(item => item.Codigo === product.Codigo);
+
+            if (productoEnCarrito) {
+                // Si el producto ya está en el carrito, aumentar la cantidad
+                productoEnCarrito.Cantidad++;
+            } else {
+                // Si el producto no está en el carrito, agregarlo
+                carrito.push({
+                    Codigo: product.Codigo,
+                    Producto: product.Producto,
+                    Precio: product.Precio,
+                    Cantidad: 1
+                });
+            }
+
+            // Guardar el carrito actualizado en el almacenamiento local
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            // Actualizar la visualización del carrito
+            actualizarCarrito();
+        }
+
+        // Función para actualizar la visualización del carrito
+        function actualizarCarrito() {
+            // Obtener el carrito actual desde el almacenamiento local
+            var carrito = JSON.parse(localStorage.getItem('carrito'));
+
+            // Obtener el contenedor de elementos del carrito
+            var cartItemsContainer = document.getElementById('cart-items');
+
+            // Vaciar el contenedor actual
+            cartItemsContainer.innerHTML = '';
+
+            // Variables para el cálculo del total
+            var total = 0;
+
+            // Iterar a través de los elementos del carrito
+            carrito.forEach(function (item) {
+                // Crear una fila para el elemento del carrito
+                var row = document.createElement('tr');
+
+                // Crear las celdas para mostrar los detalles del producto en el carrito
+                var productNameCell = document.createElement('td');
+                productNameCell.textContent = item.Producto;
+
+                var priceCell = document.createElement('td');
+                priceCell.textContent = item.Precio;
+
+                var quantityCell = document.createElement('td');
+                quantityCell.textContent = item.Cantidad;
+
+                var totalCell = document.createElement('td');
+                var itemTotal = item.Precio * item.Cantidad;
+                totalCell.textContent = itemTotal.toFixed(2);
+
+                var deleteCell = document.createElement('td');
+                var deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Eliminar';
+                deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                deleteButton.addEventListener('click', function () {
+                    eliminarDelCarrito(item.Codigo);
+                });
+                deleteCell.appendChild(deleteButton);
+
+                // Agregar las celdas a la fila
+                row.appendChild(productNameCell);
+                row.appendChild(priceCell);
+                row.appendChild(quantityCell);
+                row.appendChild(totalCell);
+                row.appendChild(deleteCell);
+
+                // Agregar la fila al contenedor de elementos del carrito
+                cartItemsContainer.appendChild(row);
+
+                // Sumar el total actual con el total de este elemento
+                total += itemTotal;
+            });
+
+            // Actualizar el total en el carrito
+            var totalElement = document.createElement('h4');
+            totalElement.textContent = 'Total: ' + total.toFixed(2);
+            cartItemsContainer.appendChild(totalElement);
+
+            // Mostrar el contenedor del carrito (anteriormente oculto)
+            var cartContainer = document.getElementById('cart-container');
+            cartContainer.style.display = 'block';
+        }
+
+        // Función para eliminar un producto del carrito
+        function eliminarDelCarrito(codigoProducto) {
+            // Obtener el carrito actual desde el almacenamiento local
+            var carrito = JSON.parse(localStorage.getItem('carrito'));
+
+            // Encontrar el índice del producto en el carrito
+            var index = carrito.findIndex(item => item.Codigo === codigoProducto);
+
+            if (index !== -1) {
+                // Si se encuentra el producto, eliminarlo del carrito
+                carrito.splice(index, 1);
+
+                // Guardar el carrito actualizado en el almacenamiento local
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+
+                // Actualizar la visualización del carrito
+                actualizarCarrito();
+            }
+        }
+
+        // Función para generar el mensaje de WhatsApp con los detalles del pedido
+        function generarMensajePedido() {
+        // Obtener el carrito actual desde el almacenamiento local
+        var carrito = JSON.parse(localStorage.getItem('carrito'));
+
+        if (carrito.length === 0) {
+            return 'El carrito está vacío. Agregue productos antes de realizar un pedido.';
+        }
+
+        // Inicializar el mensaje
+        var mensaje = 'PEDIDO DESDE TIENDA ANTAY:\n';
+        mensaje += '*********************************************************\n';
+
+        // Iterar a través de los elementos del carrito
+        carrito.forEach(function (item, index) {
+            mensaje += 'Producto: ' + item.Producto + '\n';
+            mensaje += 'Cantidad: ' + item.Cantidad + '\n';
+            mensaje += 'Precio unitario: ' + item.Precio.toFixed(2) + '\n';
+            mensaje += 'Total por producto: ' + (item.Precio * item.Cantidad).toFixed(2) + '\n';
+
+            // Agregar una línea de asteriscos después de cada producto excepto el último
+            if (index !== carrito.length - 1) {
+                mensaje += '*********************************************************\n';
+            }
+        });
+
+        // Calcular el total del pedido
+        var totalPedido = calcularTotalPedido();
+
+        // Agregar el total del pedido al final
+        mensaje += 'TOTAL DEL PEDIDO: ' + totalPedido.toFixed(2);
+
+        return mensaje;
+        }
+
+
+        // Función para procesar el pedido y enviarlo por WhatsApp
+        function checkoutButton() {
+            // Obtener el carrito actual desde el almacenamiento local
+            var carrito = JSON.parse(localStorage.getItem('carrito'));
+
+            if (carrito.length === 0) {
+                alert('El carrito está vacío. Agregue productos antes de realizar un pedido.');
+                return;
+            }
+
+            // Generar el mensaje de WhatsApp con los detalles del pedido
+            var mensaje = 'Pedido desde Tienda Antay:\n\n';
+            carrito.forEach(function (item) {
+                mensaje += 'Producto: ' + item.Producto + '\n';
+                mensaje += 'Cantidad: ' + item.Cantidad + '\n';
+                mensaje += 'Precio unitario: ' + item.Precio + '\n';
+                mensaje += 'Total por producto: ' + (item.Precio * item.Cantidad).toFixed(2) + '\n\n';
+            });
+            mensaje += 'Total del pedido: ' + calcularTotalPedido().toFixed(2);
+
+            // Reemplazar los espacios en blanco con %20 para que funcione en WhatsApp
+            mensaje = mensaje.replace(/ /g, '%20');
+
+            // Crear la URL de WhatsApp con el mensaje
+            var whatsappURL = 'https://wa.me/NUMERO_DE_TELEFONO?text=' + mensaje;
+
+            // Reemplazar NUMERO_DE_TELEFONO con el número de teléfono real
+            whatsappURL = whatsappURL.replace('NUMERO_DE_TELEFONO', '51921566036'); // Cambia a tu número de teléfono real
+
+            // Abrir la ventana de WhatsApp para enviar el pedido
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Calcular el total del pedido
+        function calcularTotalPedido() {
+            var carrito = JSON.parse(localStorage.getItem('carrito'));
+            var total = 0;
+            carrito.forEach(function (item) {
+                total += item.Precio * item.Cantidad;
+            });
+            return total;
+        }
+
+        // Cargar los productos al cargar la página
+        window.onload = function () {
+            cargarProductos('', ''); // Cargar todos los productos al inicio
+            actualizarCarrito(); // Actualizar el carrito al cargar la página
+        };
+
+        // Filtrar productos cuando se seleccione una línea
+        var lineaSelect = document.getElementById('lineaSelect');
+        lineaSelect.addEventListener('change', function () {
+            var lineaSeleccionada = lineaSelect.value;
+            cargarProductos(lineaSeleccionada, '');
+        });
+
+        // Buscar productos cuando se presiona el botón de búsqueda
+        var searchButton = document.getElementById('searchButton');
+        searchButton.addEventListener('click', function () {
+            var searchInput = document.getElementById('searchInput');
+            var busqueda = searchInput.value;
+            cargarProductos('', busqueda);
+        });
+
+        // Procesar el pedido y enviarlo por WhatsApp cuando se presiona el botón "Realizar Pedido"
+        var checkoutButtonElement = document.getElementById('checkout');
+        checkoutButtonElement.addEventListener('click', function () {
+            checkoutButton();
+        });
+          // Cargar productos y últimos ingresos al cargar la página
+          cargarProductos('', ''); // Cargar todos los productos al principio
+        cargarUltimosIngresos();
+
+        // Función para buscar cuando se presiona la tecla "Enter"
+        function searchOnEnter(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Evitar que el formulario se envíe si está dentro de un formulario
+                var searchInput = document.getElementById('searchInput');
+                var busqueda = searchInput.value;
+                cargarProductos('', busqueda);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
